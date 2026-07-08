@@ -11,13 +11,14 @@ import wind_logo from '../images/wind.png';
 import axios from 'axios';
 
 
-const API_KEY = "api_key_gir";
+const API_KEY = "d0236a5fa7fd920af42e3f8414e65fd3";
 
 
 function Weather() {
   const [city, setCity] = useState("Ankara");
   const [currentWeather, setCurrentWeather] = useState(null);
   const [location, setLocation] = useState("");
+  const [icon, setIcon] = useState(null);
 
   const getAllDataByCity = async () => {
     const BASE_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`;
@@ -33,6 +34,7 @@ function Weather() {
 
       setCurrentWeather(nearestWeather);
       setLocation(response.data.city.name);
+      setIcon(nearestWeather.weather[0].icon);
 
     } catch (error) {
       setCurrentWeather(null);
@@ -41,6 +43,24 @@ function Weather() {
       console.error(error);
     }
   };
+
+  const allIcons ={
+    "01d": sun_logo,
+    "01n": sun_logo,
+    "02d": cloud_logo,
+    "02n": cloud_logo,
+    "03d": cloud_logo, 
+    "03n": cloud_logo,
+    "04d": drizzle_logo,
+    "04n": drizzle_logo,
+    "09d": rain_logo,
+    "09n": rain_logo,
+    "10d": rain_logo,
+    "10n": rain_logo,
+    "13d": snow_logo,
+    "13n": snow_logo,
+  }
+  console.log(allIcons[icon]);
 
   useEffect(() => {
     getAllDataByCity();
@@ -67,7 +87,7 @@ function Weather() {
         <img src={search_logo} onClick={search} />
       </div>
 
-      <img src={sun_logo} className="weather-icon" />
+      <img src={allIcons[icon]} className="weather-icon" />
 
       <p className="temperature">
         {currentWeather ? Math.round(currentWeather.main.temp) : "--"}°C
