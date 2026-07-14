@@ -1,26 +1,25 @@
-import React, { useState } from 'react'
-import '../App.css'
+﻿import { useId, useState } from 'react'
 
-function TodoCreate({oncreateTodo}) {
-  const [newTodo, setNewTodo] = useState("");
-  
-  const createTodo = () =>{
-    if(!newTodo) return;
+function TodoCreate({ onCreateTodo }) {
+  const [newTodo, setNewTodo] = useState('')
+  const inputId = useId()
 
-    const request = {
-      id : Math.floor(Math.random() * 9999999999),
-      content : newTodo
-    }
-    oncreateTodo(request);
+  const createTodo = (event) => {
+    event.preventDefault()
+    const content = newTodo.trim()
+    if (!content) return
+    onCreateTodo({ id: crypto.randomUUID(), content })
+    setNewTodo('')
   }
+
   return (
-    <div className='todo-create'>
-        <input
-        value={newTodo}
-        onChange={(e)=> setNewTodo(e.target.value)}
-        className='todo-input' type="text" placeholder='Todo giriniz'/>
-        <button onClick={createTodo} class="todo-button"> Todo Ekle</button>
-    </div>
+    <form className="todo-create" onSubmit={createTodo}>
+      <label className="todo-label" htmlFor={inputId}>Yeni görev</label>
+      <div className="todo-create-row">
+        <input id={inputId} value={newTodo} onChange={(event) => setNewTodo(event.target.value)} className="todo-input" type="text" placeholder="Örn. Proje notlarını gözden geçir" autoComplete="off" />
+        <button className="todo-button" type="submit" disabled={!newTodo.trim()}>Ekle</button>
+      </div>
+    </form>
   )
 }
 
